@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from "@/lib/utils"
-
 import { useMemo } from 'react';
 import { TIME_SLOTS, DAYS, DAY_NAMES, getSlotIndex, getSlotCountBetween } from '@/lib/schedule-types';
 import type { ScheduleEvent } from '@/lib/schedule-types';
@@ -17,7 +16,6 @@ interface ScheduleTableProps {
 export function ScheduleTable({ onCellClick, onEventClick }: ScheduleTableProps) {
   const events = useScheduleStore((state) => state.events);
 
-  // Group events by day and start slot
   const eventGrid = useMemo(() => {
     const grid: Record<string, Record<number, ScheduleEvent[]>> = {};
     
@@ -38,7 +36,6 @@ export function ScheduleTable({ onCellClick, onEventClick }: ScheduleTableProps)
     return grid;
   }, [events]);
 
-  // Track which cells are covered by rowspan
   const occupiedCells = useMemo(() => {
     const occupied: Record<string, Set<number>> = {};
     DAYS.forEach((day) => {
@@ -56,7 +53,6 @@ export function ScheduleTable({ onCellClick, onEventClick }: ScheduleTableProps)
             occupied[event.day].add(i);
             coveredSlots++;
           } else {
-            // Skip lunch row in occupied calculation but don't count it
             occupied[event.day].add(i);
           }
         }
@@ -66,7 +62,6 @@ export function ScheduleTable({ onCellClick, onEventClick }: ScheduleTableProps)
     return occupied;
   }, [events]);
 
-  // Calculate rowspan for events
   const getRowSpan = (day: string, slotIdx: number): number => {
     const cellEvents = eventGrid[day]?.[slotIdx] || [];
     if (cellEvents.length === 0) return 1;
@@ -77,11 +72,9 @@ export function ScheduleTable({ onCellClick, onEventClick }: ScheduleTableProps)
       if (slotCount > maxSlotCount) maxSlotCount = slotCount;
     });
 
-    // Account for lunch break
     const lunchIdx = TIME_SLOTS.findIndex(s => s.lunch);
     let rowSpan = maxSlotCount;
     
-    // If span would cross lunch, add 1 for the lunch row
     const endIdx = slotIdx + maxSlotCount - 1;
     if (slotIdx < lunchIdx && endIdx >= lunchIdx) {
       rowSpan += 1;
@@ -140,7 +133,6 @@ export function ScheduleTable({ onCellClick, onEventClick }: ScheduleTableProps)
                     {slot.start}–{slot.end}
                   </td>
                   {DAYS.map((day) => {
-                    // Skip if this cell is covered by a rowspan from above
                     if (occupiedCells[day].has(slotIdx)) {
                       return null;
                     }

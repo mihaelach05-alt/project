@@ -26,11 +26,9 @@ const defaultConfig: CalendarConfig = {
 export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProps) {
   const { calendarConfig, setCalendarConfig } = useScheduleStore();
   
-  // Merge existing config with defaults to handle migration from old data format
   const [config, setConfig] = useState<CalendarConfig>(() => {
     if (!calendarConfig) return defaultConfig;
     
-    // Handle migration from old summerRetakeSession to annualRetakeSession
     const migrated: CalendarConfig = {
       ...defaultConfig,
       ...calendarConfig,
@@ -42,7 +40,6 @@ export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProp
   });
 
   const handleSave = () => {
-    // Validate that at least winter or summer semester has dates
     if ((!config.winterSemester.start || !config.winterSemester.end) && 
         (!config.summerSemester.start || !config.summerSemester.end)) {
       alert('Моля, въведете поне един семестър');
@@ -77,7 +74,6 @@ export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProp
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Winter Semester */}
           <div className="bg-blue-50 rounded-xl p-4 space-y-4">
             <h3 className="font-bold text-blue-800 flex items-center gap-2">
               <Snowflake className="w-5 h-5" />
@@ -160,7 +156,6 @@ export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProp
             </div>
           </div>
 
-          {/* Summer Semester */}
           <div className="bg-amber-50 rounded-xl p-4 space-y-4">
             <h3 className="font-bold text-amber-800 flex items-center gap-2">
               <Sun className="w-5 h-5" />
@@ -214,10 +209,8 @@ export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProp
                 </div>
               </div>
             </div>
-
           </div>
 
-          {/* Annual Retake Session */}
           <div className="bg-violet-50 rounded-xl p-4 space-y-4">
             <h3 className="font-bold text-violet-800 flex items-center gap-2">
               <RotateCcw className="w-5 h-5" />
@@ -246,7 +239,6 @@ export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProp
             </div>
           </div>
 
-          {/* Liquidation Session */}
           <div className="bg-pink-50 rounded-xl p-4 space-y-4">
             <h3 className="font-bold text-pink-800 flex items-center gap-2">
               <Eraser className="w-5 h-5" />

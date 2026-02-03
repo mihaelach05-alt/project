@@ -1,7 +1,6 @@
 'use client';
 
 import React from "react"
-
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useScheduleStore } from '@/lib/schedule-store';
 import { BULGARIAN_MONTHS } from '@/lib/schedule-types';
@@ -35,7 +34,7 @@ function isOddWeek(date: Date, semesterStart: Date): boolean {
   const dateMonday = getMondayOfWeek(date);
   const diffTime = dateMonday.getTime() - startMonday.getTime();
   const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-  return diffWeeks % 2 === 0; // First week is odd (index 0)
+  return diffWeeks % 2 === 0;
 }
 
 function formatDateKey(date: Date): string {
@@ -97,7 +96,6 @@ function CompactMonthGrid({
         }
       }
       
-      // Check if date is within semester range for coloring
       const isWithinSemester = isDateInRange(date, semesterStart, semesterEnd);
       
       days.push({
@@ -113,7 +111,6 @@ function CompactMonthGrid({
     return days;
   }, [year, month, semesterStart, semesterEnd, holidays, vacations, sessionRanges]);
 
-  // Check if we need all 6 rows
   const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
   const adjustedFirstDay = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
@@ -236,14 +233,12 @@ export function SidebarCalendar() {
     }
   };
 
-  // Calculate months to display based on semester
   const months = useMemo(() => {
     if (!calendarConfig) return [];
     
     const monthsList: { year: number; month: number }[] = [];
     
     if (semester === 'winter') {
-      // Winter: September through end of Winter Retake Session
       const winterStart = calendarConfig.winterSemester.start ? new Date(calendarConfig.winterSemester.start) : null;
       const winterRetakeEnd = calendarConfig.winterRetakeSession.end ? new Date(calendarConfig.winterRetakeSession.end) : null;
       
@@ -258,26 +253,22 @@ export function SidebarCalendar() {
         }
       }
     } else {
-      // Summer: February through June, then September (for Annual Retake/Liquidation)
       const summerStart = calendarConfig.summerSemester.start ? new Date(calendarConfig.summerSemester.start) : null;
       const summerEnd = calendarConfig.summerSemester.end ? new Date(calendarConfig.summerSemester.end) : null;
       
       if (summerStart && summerEnd) {
-        // Add Feb-June
         const current = new Date(summerStart.getFullYear(), summerStart.getMonth(), 1);
-        while (current <= summerEnd && current.getMonth() <= 5) { // Up to June (month 5)
+        while (current <= summerEnd && current.getMonth() <= 5) {
           monthsList.push({ year: current.getFullYear(), month: current.getMonth() });
           current.setMonth(current.getMonth() + 1);
         }
         
-        // Add September for Annual Retake and Liquidation sessions
         const annualRetake = calendarConfig.annualRetakeSession || { start: '', end: '' };
         const liquidation = calendarConfig.liquidationSession || { start: '', end: '' };
         
         if ((annualRetake?.start && annualRetake?.end) || (liquidation?.start && liquidation?.end)) {
-          // Determine the year for September (could be same year or next)
           const septemberYear = summerStart.getFullYear();
-          monthsList.push({ year: septemberYear, month: 8 }); // September is month 8
+          monthsList.push({ year: septemberYear, month: 8 });
         }
       }
     }
@@ -325,7 +316,6 @@ export function SidebarCalendar() {
           type: 'regular'
         });
       }
-      // Annual Retake Session (shown in summer view)
       const annualRetake = calendarConfig.annualRetakeSession || { start: '', end: '' };
       if (annualRetake?.start && annualRetake?.end) {
         ranges.push({
@@ -336,7 +326,6 @@ export function SidebarCalendar() {
       }
     }
     
-    // Liquidation session shown in both views if in range
     const liquidation = calendarConfig.liquidationSession || { start: '', end: '' };
     if (liquidation?.start && liquidation?.end) {
       ranges.push({
@@ -349,7 +338,6 @@ export function SidebarCalendar() {
     return ranges;
   }, [calendarConfig, semester]);
 
-  // No calendar configured - show Add Calendar button
   if (!calendarConfig) {
     return (
       <div className="w-[280px] bg-card/80 backdrop-blur-md rounded-2xl shadow-lg p-4 flex flex-col items-center justify-center gap-4 flex-shrink-0">
@@ -384,7 +372,6 @@ export function SidebarCalendar() {
       className="bg-card/80 backdrop-blur-md rounded-2xl shadow-lg p-3 flex flex-col gap-3 overflow-hidden flex-shrink-0 relative"
       style={{ width: `${sidebarWidth}px` }}
     >
-      {/* Resize handle */}
       <div
         onMouseDown={handleMouseDown}
         className={cn(
@@ -395,7 +382,6 @@ export function SidebarCalendar() {
         <GripVertical className="w-3 h-3 text-muted-foreground/50" />
       </div>
       
-      {/* Controls */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <span className="font-bold text-[10px] text-muted-foreground uppercase tracking-wider">
@@ -440,7 +426,6 @@ export function SidebarCalendar() {
           </button>
         </div>
 
-        {/* Marking Mode */}
         <div className="flex gap-1">
           <button
             type="button"
@@ -471,7 +456,6 @@ export function SidebarCalendar() {
         </div>
       </div>
 
-      {/* Multi-month Calendar - 2 column grid */}
       <div className="flex-1 overflow-y-auto scrollbar-thin pr-1">
         {months.length === 0 ? (
           <div className="text-center text-muted-foreground text-xs py-4">
@@ -496,7 +480,6 @@ export function SidebarCalendar() {
         )}
       </div>
 
-      {/* Compact Legend */}
       <div className="flex flex-col gap-1.5 pt-2 border-t border-border">
         <div className="font-bold text-[8px] text-foreground uppercase tracking-wider flex items-center gap-1">
           <Pin className="w-2.5 h-2.5" />
@@ -525,26 +508,21 @@ export function SidebarCalendar() {
           </div>
           
           <div className="flex items-center gap-1 text-muted-foreground font-medium">
-            <div className="w-4 h-0.5 bg-orange-500 rounded-sm" />
-            <span>Редовна</span>
+            <div className="w-2.5 h-2.5 rounded-sm border-b-2 border-orange-500" />
+            <span>Редовна сесия</span>
           </div>
           
           <div className="flex items-center gap-1 text-muted-foreground font-medium">
-            <div className="w-4 h-0.5 bg-purple-500 rounded-sm" />
-            <span>Поправка</span>
+            <div className="w-2.5 h-2.5 rounded-sm border-b-2 border-purple-500" />
+            <span>Поправителна</span>
           </div>
           
           <div className="flex items-center gap-1 text-muted-foreground font-medium col-span-2">
-            <div className="w-4 h-0.5 bg-pink-500 rounded-sm" />
-            <span>Ликвидация</span>
+            <div className="w-2.5 h-2.5 rounded-sm border-b-2 border-pink-500" />
+            <span>Ликвидационна сесия</span>
           </div>
         </div>
       </div>
-
-      <CalendarConfigModal 
-        isOpen={isConfigModalOpen} 
-        onClose={() => setIsConfigModalOpen(false)} 
-      />
     </div>
   );
 }

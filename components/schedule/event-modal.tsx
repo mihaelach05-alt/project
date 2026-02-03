@@ -1,7 +1,6 @@
 'use client';
 
 import React from "react"
-
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -121,7 +120,6 @@ export function EventModal({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-8">
-          {/* Section 1: Basic Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
               <FileText className="w-5 h-5" />
@@ -180,7 +178,6 @@ export function EventModal({
 
           <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-          {/* Section 2: Schedule */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
               <Clock className="w-5 h-5" />
@@ -271,7 +268,6 @@ export function EventModal({
 
           <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-          {/* Section 3: Additional Options */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
               <Settings className="w-5 h-5" />
@@ -360,14 +356,12 @@ export function EventModal({
             )}
           </div>
 
-          {/* Info box */}
           <div className="p-3.5 bg-gradient-to-r from-emerald-50 to-emerald-100 border-l-4 border-emerald-500 rounded-lg text-sm text-emerald-800 font-medium">
             <strong>Съвет:</strong> Системата автоматично обработва сложни комбинации - диагонално разделяне за нечетни/четни седмици и четириъгълници за множество събития.
           </div>
 
           <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-          {/* Actions */}
           <div className="flex gap-4 pt-4">
             <Button 
               type="submit" 
@@ -389,7 +383,6 @@ export function EventModal({
             )}
           </div>
 
-          {/* Delete confirmation */}
           {showDeleteConfirm && (
             <div className="p-6 bg-destructive/10 rounded-xl border-2 border-destructive/30 space-y-4">
               <div className="flex items-center gap-3">

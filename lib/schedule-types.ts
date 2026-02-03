@@ -76,19 +76,14 @@ export const BULGARIAN_MONTHS = [
   'Юли', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'
 ];
 
-
-
 export function getSlotIndex(time: string): number {
   return TIME_SLOTS.findIndex(s => s.start === time);
 }
 
 export function getEndSlotIndex(time: string): number {
-  // Find the slot where end_time matches the slot's end OR
-  // find the last slot that starts before the end_time
   const exactMatch = TIME_SLOTS.findIndex(s => s.end === time);
   if (exactMatch !== -1) return exactMatch;
   
-  // If no exact match, find the slot that contains this end time
   for (let i = TIME_SLOTS.length - 1; i >= 0; i--) {
     if (TIME_SLOTS[i].start < time && !TIME_SLOTS[i].lunch) {
       return i;

@@ -28,9 +28,7 @@ export function EventBlock({ event, isCompact = false, onClick }: EventBlockProp
         onClick();
       }}
     >
-      {/* Main content area */}
       <div className="flex-1 flex flex-col min-h-0 z-10 gap-0.5 overflow-hidden">
-        {/* Subject Name - LARGE & BOLD */}
         <div className={cn(
           "font-bold text-slate-900 break-words tracking-tight hyphens-auto leading-tight",
           isCompact 
@@ -42,7 +40,6 @@ export function EventBlock({ event, isCompact = false, onClick }: EventBlockProp
           {event.subject_name}
         </div>
         
-        {/* Room Number - normal weight */}
         <div className={cn(
           "font-normal text-slate-600",
           isCompact ? "text-[11px]" : "text-[13px]"
@@ -50,7 +47,6 @@ export function EventBlock({ event, isCompact = false, onClick }: EventBlockProp
           {event.room || '-'}
         </div>
         
-        {/* Control Form - italic in parentheses */}
         {showControl && !isCompact && (
           <div className="font-medium text-slate-500 text-[12px] italic">
             ({CONTROL_FORMS[event.control_form]})
@@ -58,9 +54,7 @@ export function EventBlock({ event, isCompact = false, onClick }: EventBlockProp
         )}
       </div>
 
-      {/* TAGS AREA - Bottom row with strict positioning */}
       <div className="absolute bottom-1.5 left-1.5 right-1.5 flex justify-between items-end pointer-events-none z-20">
-        {/* LEFT: Subgroup tag */}
         <div>
           {showSubgroup && (
             <span className="glassy-badge">
@@ -69,7 +63,6 @@ export function EventBlock({ event, isCompact = false, onClick }: EventBlockProp
           )}
         </div>
         
-        {/* RIGHT: Project tag */}
         <div>
           {showProject && (
             <span className="glassy-badge">

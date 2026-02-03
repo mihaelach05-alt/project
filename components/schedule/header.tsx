@@ -14,7 +14,6 @@ export function Header({ onAddEvent }: HeaderProps) {
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
   const { calendarConfig, semester } = useScheduleStore();
 
-  // Calculate academic year from calendar config
   const academicYear = useMemo(() => {
     if (!calendarConfig) return null;
     

@@ -27,7 +27,6 @@ export function ScheduleCell({
 
   const isEmpty = events.length === 0;
 
-  // Render empty cell
   if (isEmpty) {
     return (
       <td 
@@ -43,7 +42,6 @@ export function ScheduleCell({
     );
   }
 
-  // Single event for every week - FULL CELL
   if (everyWeekEvents.length > 0 && oddWeekEvents.length === 0 && evenWeekEvents.length === 0) {
     return (
       <td 
@@ -64,11 +62,9 @@ export function ScheduleCell({
     );
   }
 
-  // Check for odd/even alternation
   const hasOdd = oddWeekEvents.length > 0;
   const hasEven = evenWeekEvents.length > 0;
 
-  // HORIZONTAL SPLIT for ODD/EVEN - Safe zones, no overlap
   if (hasOdd && hasEven) {
     return (
       <td 
@@ -77,7 +73,6 @@ export function ScheduleCell({
         rowSpan={rowSpan}
       >
         <div className="split-container">
-          {/* TOP HALF - ODD WEEK */}
           <div className="split-top">
             <div className="split-label odd-label">Нечетна</div>
             <div className="split-content">
@@ -103,10 +98,8 @@ export function ScheduleCell({
             </div>
           </div>
           
-          {/* DIVIDER LINE */}
           <div className="split-divider" />
           
-          {/* BOTTOM HALF - EVEN WEEK */}
           <div className="split-bottom">
             <div className="split-label even-label">Четна</div>
             <div className="split-content">
@@ -136,7 +129,6 @@ export function ScheduleCell({
     );
   }
 
-  // Single week type only (odd OR even, but not both)
   if (hasOdd || hasEven) {
     const weekEvents = hasOdd ? oddWeekEvents : evenWeekEvents;
     const weekType = hasOdd ? 'odd' : 'even';
@@ -177,7 +169,6 @@ export function ScheduleCell({
     );
   }
 
-  // Fallback: render all events
   return (
     <td 
       className="schedule-cell border border-border p-1"

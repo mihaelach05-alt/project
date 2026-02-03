@@ -1,18 +1,17 @@
 import React from "react"
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const poppins = Poppins({ 
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"]
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-poppins"
 });
 
 export const metadata: Metadata = {
   title: 'Университетски Разпис',
   description: 'Управление на учебния график',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
@@ -32,6 +31,12 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  themeColor: '#3b82f6',
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,7 +46,6 @@ export default function RootLayout({
     <html lang="bg">
       <body className={`${poppins.className} antialiased`}>
         {children}
-        <Analytics />
       </body>
     </html>
   )
