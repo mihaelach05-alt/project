@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { ScheduleEvent } from './schedule-types';
 import { generateId } from './schedule-types';
 
@@ -31,6 +31,8 @@ interface ScheduleStore {
   vacations: string[];
   addVacation: (date: string) => void;
   removeVacation: (date: string) => void;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }
 
 export const useScheduleStore = create<ScheduleStore>()(
@@ -70,9 +72,15 @@ export const useScheduleStore = create<ScheduleStore>()(
       removeVacation: (date) => set((state) => ({ 
         vacations: state.vacations.filter(d => d !== date) 
       })),
+      _hasHydrated: false,
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
     }),
     {
       name: 'schedule-storage',
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

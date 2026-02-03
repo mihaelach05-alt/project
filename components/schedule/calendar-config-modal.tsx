@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,18 +26,22 @@ const defaultConfig: CalendarConfig = {
 export function CalendarConfigModal({ isOpen, onClose }: CalendarConfigModalProps) {
   const { calendarConfig, setCalendarConfig } = useScheduleStore();
   
-  const [config, setConfig] = useState<CalendarConfig>(() => {
-    if (!calendarConfig) return defaultConfig;
-    
-    const migrated: CalendarConfig = {
-      ...defaultConfig,
-      ...calendarConfig,
-      annualRetakeSession: calendarConfig.annualRetakeSession || 
-        (calendarConfig as unknown as { summerRetakeSession?: { start: string; end: string } }).summerRetakeSession || 
-        { start: '', end: '' },
-    };
-    return migrated;
-  });
+  const [config, setConfig] = useState<CalendarConfig>(defaultConfig);
+  
+  useEffect(() => {
+    if (calendarConfig) {
+      const migrated: CalendarConfig = {
+        ...defaultConfig,
+        ...calendarConfig,
+        annualRetakeSession: calendarConfig.annualRetakeSession || 
+          (calendarConfig as unknown as { summerRetakeSession?: { start: string; end: string } }).summerRetakeSession || 
+          { start: '', end: '' },
+      };
+      setConfig(migrated);
+    } else {
+      setConfig(defaultConfig);
+    }
+  }, [calendarConfig, isOpen]);
 
   const handleSave = () => {
     if ((!config.winterSemester.start || !config.winterSemester.end) && 
